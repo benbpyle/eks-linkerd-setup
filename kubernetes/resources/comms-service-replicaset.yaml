@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: comms-service
+  namespace: greeter
+  labels:
+    app: comms-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: comms-service
+  template:
+    metadata:
+      labels:
+        app: comms-service
+      annotations:
+        linkerd.io/inject: enabled
+    spec:
+      containers:
+      - name: comms-service
+        image: public.ecr.aws/f8u4w2p3/rust/comms:latest
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        env:
+        - name: SERVICE_URL
+          value: "http://greeter-service.greeter.svc.cluster.local:3000"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
