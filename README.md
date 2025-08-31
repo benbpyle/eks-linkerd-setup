@@ -327,15 +327,60 @@ linkerd upgrade | kubectl apply -f -
 
 ## Clean Up
 
-To remove everything:
+### Complete Cleanup (Recommended)
+
+Use the automated cleanup script to remove all resources:
 
 ```bash
-# Remove Linkerd
+./scripts/cleanup-all.sh
+```
+
+This script will:
+1. **Delete application resources** - Remove greeter namespace, services, and pods
+2. **Uninstall Linkerd** - Remove control plane, dashboard, and all mesh components
+3. **Delete EKS cluster** - Remove the entire cluster and AWS resources
+4. **Provide cleanup summary** - Show what was deleted and next steps
+
+⚠️ **Warning**: This will delete the entire EKS cluster and all associated AWS resources!
+
+### Manual Cleanup (Alternative)
+
+If you prefer to clean up manually:
+
+```bash
+# Remove application resources
+kubectl delete -f kubernetes/resources/
+
+# Remove Linkerd dashboard and control plane
 linkerd viz uninstall | kubectl delete -f -
 linkerd uninstall | kubectl delete -f -
 
-# Delete the cluster
+# Delete the EKS cluster
 eksctl delete cluster -f kubernetes/cluster/cluster-config.yaml
+```
+
+### Partial Cleanup
+
+To remove only the application services (keeping Linkerd and cluster):
+
+```bash
+# Delete only the greeter namespace and services
+kubectl delete -f kubernetes/resources/
+```
+
+### Local Cleanup
+
+After cluster deletion, optionally clean up local files:
+
+```bash
+# Remove kubeconfig entries
+kubectl config delete-context <context-name>
+
+# Remove Linkerd CLI
+sudo rm -f /usr/local/bin/linkerd
+
+# Clean AWS credentials cache
+rm -rf ~/.aws/cli/cache
 ```
 
 ## Contributing
@@ -348,4 +393,4 @@ eksctl delete cluster -f kubernetes/cluster/cluster-config.yaml
 
 ## License
 
-This project is provided as-is for educational and development purposes.
+This project is licensed under the BSD 2-Clause License - see the [LICENSE](LICENSE) file for details.
