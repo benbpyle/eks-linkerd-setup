@@ -35,13 +35,13 @@ if [ -d "$RESOURCES_DIR" ]; then
     # Delete all resources except namespace (delete namespace last)
     find "$RESOURCES_DIR" -name "*.yaml" -o -name "*.yml" | grep -v "namespace.yaml" | while read -r resource; do
         echo "Deleting: $(basename "$resource")"
-        kubectl delete -f "$resource" --ignore-not-found=true
+        kubectl delete -f "$resource" --ignore-not-found || true
     done
     
     # Delete namespace last
     if [ -f "$RESOURCES_DIR/namespace.yaml" ]; then
         echo "Deleting: namespace.yaml"
-        kubectl delete -f "$RESOURCES_DIR/namespace.yaml" --ignore-not-found=true
+        kubectl delete -f "$RESOURCES_DIR/namespace.yaml" --ignore-not-found || true
     fi
     
     echo "✅ Application resources deleted"
@@ -60,11 +60,11 @@ echo "Checking if Linkerd is installed..."
 
 if kubectl get namespace linkerd &> /dev/null; then
     echo "📋 Uninstalling Linkerd dashboard..."
-    linkerd viz uninstall --ignore-not-found | kubectl delete -f - || echo "Dashboard uninstall completed"
+    linkerd viz uninstall | kubectl delete -f - || echo "Dashboard uninstall completed"
     
     echo ""
     echo "📋 Uninstalling Linkerd control plane..."
-    linkerd uninstall --ignore-not-found | kubectl delete -f - || echo "Control plane uninstall completed"
+    linkerd uninstall | kubectl delete -f - || echo "Control plane uninstall completed"
     
     # Wait for namespaces to be fully deleted
     echo ""

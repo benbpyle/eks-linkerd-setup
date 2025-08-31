@@ -2,6 +2,8 @@
 
 A project for deploying and managing a Kubernetes cluster with Linkerd service mesh integration.
 
+This repository supports the blog article: [Linkerd Service Mesh on AWS EKS](https://binaryheap.com/linkerd-service-mesh-aws-eks/)
+
 ## Overview
 
 This repository contains the configuration and scripts needed to:

@@ -138,7 +138,13 @@ All of that looks amazing!
 
 ## Next Steps
 
-I've barely scratched the surface of what I can accomplish with [Linkerd](https://linkerd.io/2.18/getting-started/).  The following capabilities are what I'd recommend exploring next (and I just might in future posts):
+First, I'd recommend that if you followed along, you should clean up the resources you created.  You can do this by running the following command:
+
+```bash
+./script/cleanup-all.sh
+```
+
+As for Linkerd, I've barely scratched the surface of what I can accomplish with [it](https://linkerd.io/2.18/getting-started/).  The following capabilities are what I'd recommend exploring next (and I just might in future posts):
 
 - [Linkerd's Retries](https://linkerd.io/2.18/reference/retries/)
 - [Linkerd's Circuit Breaking](https://linkerd.io/2.18/reference/circuit-breaking/)
